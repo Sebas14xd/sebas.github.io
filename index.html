@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Página de Dragon Ball</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to bottom, #ffcc00, #f57c00);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .creator {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+        }
+        .creator img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .creator p {
+            font-size: 1.2em;
+            margin: 0;
+            padding: 0.5em 0;
+        }
+        header {
+            background-color: #ffcc00;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        header img {
+            width: 50%;
+            height: auto;
+        }
+        nav {
+            background-color: #f57c00;
+            display: flex;
+            justify-content: center;
+            padding: 0.5em 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            font-size: 1.2em;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        nav a:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #ffcc00;
+            visibility: hidden;
+            transform: scaleX(0);
+            transition: all 0.3s ease-in-out;
+        }
+        nav a:hover:before {
+            visibility: visible;
+            transform: scaleX(1);
+        }
+        nav a:hover {
+            color: #ffcc00;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2em auto;
+            padding: 2em;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .section {
+            background-color: rgba(255, 204, 0, 0.9);
+            padding: 2em;
+            margin-bottom: 2em;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .section:before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            background: url('dragonball-pattern.png') repeat;
+            top: 0;
+            left: -50%;
+            opacity: 0.1;
+        }
+        .section h2 {
+            text-align: center;
+            color: #333;
+            text-shadow: 1px 1px 2px #000;
+            margin-bottom: 1em;
+            position: relative;
+            z-index: 1;
+        }
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .character-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .character-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .character-image {
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+        }
+        .character-info {
+            text-align: center;
+            padding: 20px;
+        }
+        .character-info h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .character-info p {
+            color: #666;
+            margin: 5px 0;
+        }
+        .api-section ul, .manga-section ul, .peliculas-section ul, .videojuegos-section ul, .serie-section ul {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+        .api-section li, .manga-section li, .peliculas-section li, .videojuegos-section li, .serie-section li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .api-section li:hover, .manga-section li:hover, .peliculas-section li:hover, .videojuegos-section li:hover, .serie-section li:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .api-section li img, .manga-section li img, .peliculas-section li img, .videojuegos-section li img, .serie-section li img {
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+        @media screen and (max-width: 768px) {
+            .api-section li, .manga-section li, .peliculas-section li, .videojuegos-section li, .serie-section li {
+                width: calc(50% - 1em);
+            }
+        }
+        @media screen and (max-width: 480px) {
+            .api-section li, .manga-section li, .peliculas-section li, .videojuegos-section li, .serie-section li {
+                width: 100%;
+            }
+        }
+        .footer {
+            text-align: center;
+            padding: 1em 0;
+            background-color: #f57c00;
+            color: #fff;
+            font-size: 0.8em;
+            position: relative;
+        }
+        #searchBar {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .hidden {
+            display: none;
+        }
+        /* Estilos para la flecha de scroll hacia arriba */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background-color: #f57c00;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            padding: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .scroll-to-top:hover {
+            background-color: #ff7700;
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="creator">
+        <img src="akira.png.crdownload" alt="Foto del creador">
+        <p>Akira Toriyama - Creador de Dragon Ball<br>1955-2024</p>
+    </div>
+    <header>
+        <img src="titulo.png" alt="Título de la página">
+    </header>
+    <nav>
+        <a href="#personajes" onclick="showSection('personajes')">Personajes</a>
+        <a href="#serie" onclick="showSection('serie')">Serie</a>
+        <a href="#manga" onclick="showSection('manga')">Manga</a>
+        <a href="#peliculas" onclick="showSection('peliculas')">Películas</a>
+        <a href="#videojuegos" onclick="showSection('videojuegos')">Videojuegos</a>
+    </nav>
+    <div class="container">
+        <section id="personajes" class="section api-section">
+            <input type="text" id="searchBarPersonajes" placeholder="Buscar personaje...">
+            <h2>Personajes de Dragon Ball</h2>
+            <div class="characters-grid" id="charactersContainer"></div>
+        </section>
+        <section id="serie" class="section serie-section hidden">
+            <input type="text" id="searchBarSerie" placeholder="Buscar serie...">
+            <h2>Serie de Dragon Ball</h2>
+            <ul id="seriesList">
+                <li>
+                    <img src="clasico.webp" alt="Dragon Ball Serie">
+                    <h3>Dragon Ball</h3>
+                    <p><strong>Fecha de inicio:</strong> 26 de febrero de 1986</p>
+                    <p><strong>Fecha de finalización:</strong> 12 de abril de 1989</p>
+                    <p><strong>Numero de capitulos:</strong>153 capitulos</p>
+                </li>
+                <li>
+                    <img src="z.webp" alt="Dragon Ball Serie">
+                    <h3>Dragon Ball Z</h3>
+                    <p><strong>Fecha de inicio:</strong> 26 de abril de 1989</p>
+                    <p><strong>Fecha de finalización:</strong>31 de enero de 1996</p>
+                    <p><strong>Numero de capitulos:</strong>291 capitulos</p>
+                
+                </li>
+                <li>
+                    <img src="gt.jpe" alt="Dragon Ball Serie">
+                    <h3>Dragon Ball GT</h3>
+                    <p><strong>Fecha de inicio:</strong>7 de febrero de 1996</p>
+                    <p><strong>Fecha de finalización:</strong>19 de noviembre de 1997</p>
+                    <p><strong>Numero de capitulos:</strong>64 capitulos</p>
+                </li>
+                <li>
+                    <img src="af.jpg" alt="Dragon Ball Serie">
+                    <h3>Dragon Ball AF</h3>
+                    <p><strong>Fecha de inicio:</strong>Año 1999</p>
+                    <p><strong>Fecha de finalización:</strong> ∞ </p>
+                    <p><strong>Numero de capitulos:</strong> ∞ </p>
+                </li>
+                <li>
+                    <img src="kai.jpg" alt="Dragon Ball Serie">
+                    <h3>Dragon Ball Kai </h3>
+                    <p><strong>Fecha de inicio:</strong>5 de abril de 2009</p>
+                    <p><strong>Fecha de finalización:</strong> 27 de marzo de 2011 </p>
+                    <p><strong>Numero de capitulos:</strong> 158 capitulos </p>
+                </li>
+                <li>
+                    <img src="zkai.webp" alt="Dragon Ball Serie">
+                    <h3>Dragon Ball Z Kai </h3>
+                    <p><strong>Fecha de inicio:</strong>5 de abril de 2009</p>
+                    <p><strong>Fecha de finalización:</strong> 27 de marzo de 2011 </p>
+                    <p><strong>Numero de capitulos:</strong> 166 capitulos </p>
+                </li>
+                <li>
+                    <img src="super.jpg" alt="Dragon Ball Serie">
+                    <h3>Dragon Ball Super </h3>
+                    <p><strong>Fecha de inicio:</strong>5 de julio de 2015</p>
+                    <p><strong>Fecha de finalización:</strong> 25 de marzo de 2018 </p>
+                    <p><strong>Numero de capitulos:</strong> 131 capitulos </p>
+                </li>
+                <li>
+                    <img src="heroes.webp" alt="Dragon Ball Serie">
+                    <h3>Dragon Ball Heroes </h3>
+                    <p><strong>Fecha de inicio:</strong>1 de julio de 2018</p>
+                    <p><strong>Fecha de finalización:</strong> En Emisió</p>
+                    <p><strong>Numero de capitulos:</strong> 54 capitulos </p>
+                </li>
+            </ul>
+        </section>
+        <section id="manga" class="section manga-section hidden">
+            <input type="text" id="searchBarManga" placeholder="Buscar manga...">
+            <h2>Mangas de Dragon Ball</h2>
+            <ul id="mangaList">
+                <li>
+                    <img src="mangaclasico.png" alt="Dragon Ball Manga">
+                    <h3>Dragon Ball</h3>
+                    <p><strong>Fecha de inicio:</strong> 3 de diciembre de 1984</p>
+                    <p><strong>Fecha de finalización:</strong> 5 de junio de 1995</p>
+                    <p><strong>Número de capítulos:</strong> 519 capítulos</p>
+                    <p><strong>Número de tomos:</strong> 42 tomos</p>
+                    <p><strong>Creador y Dibujante:</strong> Akira Toriyama</p>
+                </li>
+                <li>
+                    <img src="dragonsuper.jpg" alt="Dragon Ball Super Manga">
+                    <h3>Dragon Ball Super</h3>
+                    <p><strong>Fecha de inicio:</strong> 20 de junio de 2015</p>
+                    <p><strong>Fecha de finalización:</strong> En curso</p>
+                    <p><strong>Número de capítulos:</strong> Actualmente en 103 capítulos</p>
+                    <p><strong>Número de tomos:</strong> Hasta el momento, 23 tomos recopilatorios</p>
+                    <p><strong>Creador:</strong> Akira Toriyama</p>
+                    <p><strong>Dibujante:</strong> Toyotaro</p>
+                </li>
+                <li>
+                    <img src="dragaf.webp" alt="Dragon Ball Super Manga">
+                    <h3>Dragon Ball AF </h3>
+                    <p><strong>Fecha de inicio:</strong> Años 1999</p>
+                    <p><strong>Fecha de finalización:</strong> En curso</p>
+                    <p><strong>Número de capítulos:</strong>∞</p>
+                    <p><strong>Número de tomos:</strong> ∞ tomos recopilatorios</p>
+                    <p><strong>Creador:</strong> General Tablos</p>
+                    <p><strong>Dibujante:</strong> Toyotaro</p>
+                </li>
+                <li>
+                    <img src="kakumai.jpg" alt="Dragon Ball Super Manga">
+                    <h3>Dragon Ball Kakumai </h3>
+                    <p><strong>Fecha de inicio:</strong> Año 2018</p>
+                    <p><strong>Fecha de finalización:</strong> En curso</p>
+                    <p><strong>Número de capítulos:</strong> 15 capitulos</p>
+                    <p><strong>Número de tomos:</strong> En curso </p>
+                    <p><strong>Creador y Dibujante:</strong> @Darkows, @Poissonlabo y @Reenko</p>
+                </li>
+                <li>
+                    <img src="multiverse.jpg" alt="Dragon Ball Super Manga">
+                    <h3>Dragon Ball Multiverse </h3>
+                    <p><strong>Fecha de inicio:</strong> Año 2008 </p>
+                    <p><strong>Fecha de finalización:</strong> En curso</p>
+                    <p><strong>Número de capítulos:</strong> 99 capitulos y en curso</p>
+                    <p><strong>Número de tomos:</strong> En curso </p>
+                    <p><strong>Creador:</strong>Salagir y Gogeta Jr</p>
+                </li>
+                </li>
+                <li>
+                <img src="dbxsai.jpg" alt="Dragon Ball Super Manga">
+                <h3>Dragon Ball X Saitama </h3>
+                <p><strong>Fecha de inicio:</strong> Año 2015 </p>
+                <p><strong>Fecha de finalización:</strong> Finalizado </p>
+                <p><strong>Número de capítulos:</strong> 3 capitulos</p>
+                <p><strong>Creador y Dibujante:</strong>Dragongarow Lee</p>
+                </li>
+                <li>
+                <img src="yamcharen.webp" alt="Dragon Ball Super Manga">
+                <h3>DRAGON BALL: YAMCHA GAIDEN </h3>
+                <p><strong>Fecha de inicio:</strong> Año 2016 </p>
+                <p><strong>Fecha de finalización:</strong> Año 2017 </p>
+                <p><strong>Número de capítulos:</strong> 3 capitulos</p>
+                <p><strong>Creador y Dibujante:</strong>Dragongarow Lee</p>
+                </li>
+            </ul>
+        </section>
+        <section id="peliculas" class="section peliculas-section hidden">
+            <input type="text" id="searchBarPeliculas" placeholder="Buscar película...">
+            <h2>Películas de Dragon Ball</h2>
+            <ul id="peliculasList">
+                <li>
+                    <img src="peli1.webp" alt="Dragon Ball Pelicula">
+                    <h3> Dragon Ball: La leyenda de Shen Long </h3>
+                    <p><strong>Fecha de lanzamiento:</strong> 20 de diciembre de 1986</p>
+                    <p><strong>Duración:</strong> 50 minutos</p>
+                </li>
+                <li>
+                    <img src="peli2.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball: La princesa durmiente en el castillo del espíritu maligno</h3>
+                    <p><strong>Fecha de lanzamiento:</strong> 18 de julio de 1987</p>
+                    <p><strong>Duración:</strong> 45 minutos</p>
+                </li>
+                <li>
+                    <img src="peli3.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball: Una gran aventura mística</h3>
+                    <p><strong>Fecha de lanzamiento:</strong> 9 de junio de 1988</p>
+                    <p><strong>Duración:</strong> 48 minutos</p>
+                </li>
+                <li>
+                    <img src="peli4.jpg" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball: El camino hacia el más fuerte</h3>
+                    <p><strong>Fecha de lanzamiento:</strong> 4 de marzo de 1996</p>
+                    <p><strong>Duración:</strong> 1 Hora 20 minutos</p>
+                </li>
+                <li>
+                    <img src="peli5.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Z: ¡Devuélvanme a mi Gohan!</h3>
+                    <p><strong>Fecha de lanzamiento:</strong> 15 de julio de 1989</p>
+                    <p><strong>Duración:</strong> 45 minutos</p>
+                </li>
+                <li>
+                    <img src="peli6.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Z: El hombre más fuerte de este mundo</h3>
+                    <p><strong>Fecha de lanzamiento:</strong> 10 de marzo de 1990</p>
+                    <p><strong>Duración:</strong> 1 Hora 1 minutos</p>
+                </li>
+                <li>
+                    <img src="peli7.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Z: La batalla más grande del mundo está por comenzar </h3>
+                    <p><strong>Fecha de lanzamiento:</strong> 7 de julio de 1990</p>
+                    <p><strong>Duración:</strong> 1 Hora 5 minutos</p>
+                </li>
+                <li>
+                    <img src="peli8.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Z: Goku es un Súper Saiyajin </h3>
+                    <p><strong>Fecha de lanzamiento:</strong>9 de marzo de 1991</p>
+                    <p><strong>Duración:</strong> 1 Hora 2 minutos</p>
+                </li>
+                <li>
+                    <img src="peli9.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Z: Los rivales más poderosos </h3>
+                    <p><strong>Fecha de lanzamiento:</strong>20 de julio de 1991</p>
+                    <p><strong>Duración:</strong> 1 Hora</p>
+                </li>
+                <li>
+                    <img src="peli10.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Z: Los Guerreros más Poderosos </h3>
+                    <p><strong>Fecha de lanzamiento:</strong>7 de marzo de 1992</p>
+                    <p><strong>Duración:</strong> 1 Hora 2 minutos</p>
+                </li>
+                <li>
+                    <img src="peli11.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Z: La batalla de los tres Saiyajin </h3>
+                    <p><strong>Fecha de lanzamiento:</strong>11 de julio de 1992</p>
+                    <p><strong>Duración:</strong> 46 minutos</p>
+                </li>
+                <li>
+                    <img src="peli12.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Z: El Poder Invencible </h3>
+                    <p><strong>Fecha de lanzamiento:</strong>6 de marzo de 1993</p>
+                    <p><strong>Duración:</strong> 1 Hora 12 minutos</p>
+                </li>
+                <li>
+                    <img src="peli13.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Z: La galaxia corre peligro </h3>
+                    <p><strong>Fecha de lanzamiento:</strong>7 de octubre de 1993</p>
+                    <p><strong>Duración:</strong> 1 Hora 22 minutos</p>
+                </li>
+                <li>
+                    <img src="peli14.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Z: El Regreso del Guerrero Legendario </h3>
+                    <p><strong>Fecha de lanzamiento:</strong>12 de marzo de 1994</p>
+                    <p><strong>Duración:</strong> 48 minutos</p>
+                </li>
+                <li>
+                    <img src="peli15.jpg" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Z:El combate final </h3>
+                    <p><strong>Fecha de lanzamiento:</strong>9 de julio de 1994</p>
+                    <p><strong>Duración:</strong> 50 minutos</p>
+                </li>
+                <li>
+                    <img src="peli16.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Z:La fusión de Goku y Vegeta	 </h3>
+                    <p><strong>Fecha de lanzamiento:</strong>4 de marzo de 1995</p>
+                    <p><strong>Duración:</strong> 50 minutos</p>
+                </li>
+                <li>
+                    <img src="peli17.jpg" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Z:El Ataque del Dragón	</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>15 de julio de 1995</p>
+                    <p><strong>Duración:</strong> 1 Hora 10 minutos</p>
+                </li>
+                <li>
+                    <img src="peli18.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Z:La batalla de los dioses	</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>30 de marzo de 2013</p>
+                    <p><strong>Duración:</strong> 1 Hora 45 minutos</p>
+                </li>
+                <li>
+                    <img src="peli19.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Z:La resurrección de Freezer</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>18 de abril de 2015</p>
+                    <p><strong>Duración:</strong> 1 Hora 33 minutos</p>
+                </li>
+                <li>
+                    <img src="peli20.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Super: Broly</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>14 de diciembre de 2018</p>
+                    <p><strong>Duración:</strong> 1 Hora 40 minutos</p>
+                </li>
+                <li>
+                    <img src="peli21.webp" alt="Dragon Ball Pelicula">
+                    <h3>Dragon Ball Super: Super Hero </h3>
+                    <p><strong>Fecha de lanzamiento:</strong>11 de junio del 2022 </p>
+                    <p><strong>Duración:</strong> 1 Hora 40 minutos</p>
+                </li>
+            </ul>
+        </section>
+        <section id="videojuegos" class="section videojuegos-section hidden">
+            <input type="text" id="searchBarVideojuegos" placeholder="Buscar videojuego...">
+            <h2>Videojuegos de Dragon Ball</h2>
+            <ul id="videojuegosList">
+                <li>
+                    <img src="videojuego0.jpg" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball: Sparking! Zero (Budokai Tenkaichi 4)</h3>
+                    <p><strong>Fecha de lanzamiento:</strong> 11 de octubre de 2024</p>
+                    <p><strong>Plataformas:</strong> PlayStation 5, Xbox Series X y Series S, Microsoft Windows</p>
+                </li>
+                <li>
+                    <img src="videojuego1.jpg" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Z: Kakarot</h3>
+                    <p><strong>Fecha de lanzamiento:</strong> 17 de enero de 2020</p>
+                    <p><strong>Plataformas:</strong> PS4, Xbox One, PC</p>
+                </li>
+                <li>
+                    <img src="videojuego2.jpg" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball FighterZ</h3>
+                    <p><strong>Fecha de lanzamiento:</strong> 26 de enero de 2018</p>
+                    <p><strong>Plataformas:</strong> PS4, Xbox One, PC, Switch</p>
+                </li>
+                <li>
+                    <img src="videojuego3.jpg" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Xenoverse 2</h3>
+                    <p><strong>Fecha de lanzamiento:</strong> 8 de octubre de 2016 </p>
+                    <p><strong>Plataformas:</strong> PlayStation 5, PlayStation 4, Nintendo Switch, Xbox One, Xbox Series X y Series S, Microsoft Windows</p>
+                </li>
+                <li>
+                    <img src="videojuego4.avif" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Xenoverse 2</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>14 de octubre de 2022</p>
+                    <p><strong>Plataformas:</strong>  Nintendo Switch, PlayStation 5, PlayStation 4, Xbox One, Microsoft Windows, Xbox Series X y Series S</p>
+                </li>
+                <li>
+                    <img src="videojuego5.png" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Z: Sparking (Budokai Tenkaichi)</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>6 de octubre de 2005</p>
+                    <p><strong>Plataformas:</strong> PlayStation 2</p>
+                </li>
+                <li>
+                    <img src="videojuego6.png" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Z: Sparking NEO (Budokai Tenkaichi 2)</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>5 de octubre de 2006</p>
+                    <p><strong>Plataformas:</strong>PlayStation 2, Wii </p>
+                </li>
+                <li>
+                    <img src="videojuego7.png" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Z: Sparking Meteor (Budokai Tenkaichi 3)</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>6 de octubre de 2007</p>
+                    <p><strong>Plataformas:</strong>PlayStation 2 </p>
+                </li>
+                <li>
+                    <img src="videojuego8.webp" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Z: Budokai</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>2 de noviembre de 2002</p>
+                    <p><strong>Plataformas:</strong>Nintendo GameCube, PlayStation 2, PlayStation 3, PlayStation Portable, Xbox 360</p>
+                </li>
+                <li>
+                    <img src="videojuego9.webp" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Z: Budokai 2</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>14 de noviembre de 2003</p>
+                    <p><strong>Plataformas:</strong> PlayStation 2, Nintendo GameCube</p>
+                </li>
+                <li>
+                    <img src="videojuego10.webp" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Z: Budokai 3</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>16 de noviembre de 2004</p>
+                    <p><strong>Plataformas:</strong> PlayStation 2</p>
+                </li>
+                <li>
+                    <img src="videojuego11.png" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball: Raging Blast</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>10 de noviembre de 2009</p>
+                    <p><strong>Plataformas:</strong> PlayStation 3, Xbox 360</p>
+                </li>
+                <li>
+                    <img src="videojuego12.webp" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball: Raging Blast 2</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>2 de noviembre de 2010</p>
+                    <p><strong>Plataformas:</strong> PlayStation 3, Xbox 360</p>
+                </li>
+                <li>
+                    <img src="videojuego14.jpg" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Z: Dokkan Battle</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>30 de enero de 2015</p>
+                    <p><strong>Plataformas:</strong>Android, iOS, iPadOS</p>
+                </li>
+                <li>
+                    <img src="videojuego13.webp" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Legends</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>17 de mayo de 2018</p>
+                    <p><strong>Plataformas:</strong> Android, iOS, iPadOS</p>
+                </li>
+                <li>
+                    <img src="videojuego15.jpeg" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Heroes</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>11 de noviembre de 2010</p>
+                    <p><strong>Plataformas:</strong> Nintendo Switch, Nintendo 3DS, Microsoft Windows, Arcade</p>
+                </li>
+                <li>
+                    <img src="videojuego16.jpg" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Z Shin Budokai</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>7 de marzo de 2006</p>
+                    <p><strong>Plataformas:</strong> PlayStation Portable</p>
+                </li>
+                <li>
+                    <img src="videojuego17.jpg" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Z Shin Budokai 2</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>20 de marzo de 2007</p>
+                    <p><strong>Plataformas:</strong> Sony PSP, PlayStation Portable</p>
+                </li>
+                <li>
+                    <img src="videojuego18.webp" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball: Advanced Adventure</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>18 de noviembre de 2004</p>
+                    <p><strong>Plataformas:</strong> Game Boy Advance</p>
+                </li>
+                <li>
+                    <img src="videojuego20.webp" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Z: The Legacy of Goku</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>14 de mayo de 2002</p>
+                    <p><strong>Plataformas:</strong> Game Boy Advance</p>
+                </li>
+                <li>
+                    <img src="videojuego21.webp" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Z: The Legacy of Goku 2</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>17 de junio de 2003</p>
+                    <p><strong>Plataformas:</strong> Game Boy Advance</p>
+                </li>
+                <li>
+                    <img src="videojuego22.webp" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Z: Buu's Fury</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>14 de septiembre de 2004</p>
+                    <p><strong>Plataformas:</strong> Game Boy Advance</p>
+                </li>
+                <li>
+                    <img src="videojuego23.webp" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball Z: Sagas</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>22 de marzo de 2005</p>
+                    <p><strong>Plataformas:</strong> PlayStation 2, Nintendo GameCube, Xbox</p>
+                </li>
+                <li>
+                    <img src="videojuego24.webp" alt="Dragon Ball Videojuego">
+                    <h3>Dragon Ball: Fusions</h3>
+                    <p><strong>Fecha de lanzamiento:</strong>4 de agosto de 2016</p>
+                    <p><strong>Plataformas:</strong>Nintendo 3DS</p>
+                </li>
+
+            </ul>
+        </section>
+    </div>
+    <button class="scroll-to-top" onclick="scrollToTop()">⬆️</button>
+    <footer class="footer">
+        <p>&copy; 2024 Mi Página de Dragon Ball. Todos los derechos reservados.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+        axios.get('https://personajes-5271.restdb.io/rest/Personajes-2', {
+            headers: {
+                'Content-Type': 'application/json',
+                'x-apikey': '665a00309dbb48069e715f6e'
+            }
+        })
+        .then(response => {
+            const characters = response.data;
+            const charactersContainer = document.querySelector('#charactersContainer');
+            const searchBarPersonajes = document.querySelector('#searchBarPersonajes');
+
+            function displayCharacters(characters) {
+                charactersContainer.innerHTML = '';
+                characters.forEach(character => {
+                    const card = document.createElement('div');
+                    card.classList.add('character-card');
+                    card.innerHTML = `
+                        <img src="${character.imagen}" alt="${character.Personaje}" class="character-image">
+                        <div class="character-info">
+                            <h2>${character.Personaje}</h2>
+                            <p><strong>Raza:</strong> ${character.Raza}</p>
+                            <p><strong>Planeta de origen:</strong> ${character['Planeta de origen']}</p>
+                            <p><strong>Edad (aproximada):</strong> ${character['Edad aproximada']}</p>
+                            <p><strong>Universo:</strong> ${character.Universo}</p>
+                        </div>
+                    `;
+                    charactersContainer.appendChild(card);
+                });
+            }
+
+            displayCharacters(characters);
+
+            searchBarPersonajes.addEventListener('input', (e) => {
+                const searchString = e.target.value.toLowerCase();
+                const filteredCharacters = characters.filter(character => 
+                    character.Personaje.toLowerCase().includes(searchString)
+                );
+                displayCharacters(filteredCharacters);
+            });
+        })
+        .catch(error => {
+            console.error('Error al obtener datos de la API:', error);
+        });
+
+        function setupSearchBar(searchBarId, listId, itemSelector) {
+            const searchBar = document.querySelector(searchBarId);
+            const list = document.querySelector(listId);
+            const items = list.querySelectorAll(itemSelector);
+
+            searchBar.addEventListener('input', (e) => {
+                const searchString = e.target.value.toLowerCase();
+                items.forEach(item => {
+                    const itemName = item.querySelector('h3').textContent.toLowerCase();
+                    if (itemName.includes(searchString)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        setupSearchBar('#searchBarSerie', '#seriesList', 'li');
+        setupSearchBar('#searchBarManga', '#mangaList', 'li');
+        setupSearchBar('#searchBarPeliculas', '#peliculasList', 'li');
+        setupSearchBar('#searchBarVideojuegos', '#videojuegosList', 'li');
+
+        // Mostrar la flecha de desplazamiento hacia arriba al hacer scroll
+        window.addEventListener('scroll', () => {
+            const scrollButton = document.querySelector('.scroll-to-top');
+            if (window.scrollY > 300) {
+                scrollButton.style.display = 'block';
+            } else {
+                scrollButton.style.display = 'none';
+            }
+        });
+
+        // Función para desplazarse hacia arriba
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
